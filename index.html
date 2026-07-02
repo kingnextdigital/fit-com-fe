@@ -15,5 +15,15 @@
   <link rel="manifest" href="/fit-com-fe/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/fit-com-fe/registerSW.js"></script></head>
   <body>
     <div id="root"></div>
+    <script>
+      // Force-remove outdated service workers (fixes stale cache / 404 loop)
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(regs) {
+          regs.forEach(function(reg) {
+            if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+          });
+        });
+      }
+    </script>
   </body>
 </html>
